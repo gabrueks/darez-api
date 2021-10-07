@@ -1,0 +1,2420 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/companies": {
+      "post": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Cria uma nova empresa",
+        "operationId": "createCompany",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCompanyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string"
+                },
+                "user_group": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Company"
+        ],
+        "operationId": "updateCompany",
+        "description": "Atualiza a empresa do usuario logado",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCompanyUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Lista todos os dados da empresa do usuario logado",
+        "operationId": "companiesPage",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "Company",
+            "schema": {
+              "$ref": "#/definitions/companiesPageResponse"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/{ID}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Lista todos os dados de uma empresa sem usuário logado",
+        "operationId": "companyNoLog",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "Company",
+            "schema": {
+              "$ref": "#/definitions/companiesNoLogResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid Input"
+          }
+        }
+      }
+    },
+    "/v1/companies/images/banner": {
+      "put": {
+        "tags": [
+          "Company banner"
+        ],
+        "description": "Atualiza o banner de uma empresa sendo usuario dono da loja",
+        "operationId": "updateCompanyBanner",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file",
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/definitions/UpdateCompanyBannerRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Company banner"
+        ],
+        "description": "Retorna o banner de uma empresa junto com a url do bucket S3 que esta localizado. Para visualizar a imagem, basta concatenar bucket_url+banner. Se for um usuário logado dono de empresa, deve preencher a query com seu token. Caso contrário, deve ser enviado o id de uma empresa via query. Não devem ser preenchidos os dois campos.",
+        "operationId": "getCompanyBanner",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "ID",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respose body",
+            "schema": {
+              "$ref": "#/definitions/bannerFromComapanyResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Company banner"
+        ],
+        "description": "Delete o banner de uma empresa sendo usuario dono da empresa",
+        "operationId": "deleteCompanyBanner",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/app/companies/images/banner": {
+      "put": {
+        "tags": [
+          "Company banner"
+        ],
+        "description": "Atualiza o banner de uma empresa sendo usuario dono da loja",
+        "operationId": "updateCompanyBannerApp",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateBannerAppRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/companies/images/logo": {
+      "put": {
+        "tags": [
+          "Company logo"
+        ],
+        "description": "Atualiza o logo de uma empresa sendo usuario dono da loja",
+        "operationId": "updateCompanyLogo",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file",
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/definitions/UpdateCompanyBannerRequest"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Company logo"
+        ],
+        "description": "Retorna o logo de uma empresa junto com a url do bucket S3 que esta localizado. Para visualizar a imagem, basta concatenar bucket_url+logo. Se for um usuário logado dono de empresa, deve preencher a query com seu token. Caso contrário, deve ser enviado o id de uma empresa via query. Não devem ser preenchidos os dois campos.",
+        "operationId": "getCompanyLogo",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "ID",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Respose body",
+            "schema": {
+              "$ref": "#/definitions/logoFromComapanyResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete logo de uma empresa sendo usuario dono da empresa",
+        "tags": [
+          "Company logo"
+        ],
+        "operationId": "deleteCompanyLogo",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/app/companies/images/logo": {
+      "put": {
+        "tags": [
+          "Company logo"
+        ],
+        "description": "Atualiza o logo de uma empresa sendo usuario dono da loja",
+        "operationId": "updateCompanyLogoApp",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/updateLogoAppRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/companies/geo-distance": {
+      "get": {
+        "tags": [
+          "Show companies in distance range"
+        ],
+        "description": "Lista todas as empresas dentro de um raio dado uma latitude e uma longitude",
+        "operationId": "companiesRegionPage",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lat",
+            "type": "number",
+            "default": 0,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lng",
+            "type": "number",
+            "default": 1,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer",
+            "minimum": 0,
+            "default": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "range",
+            "type": "number",
+            "minimum": 0,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "CompanyRegion",
+            "schema": {
+              "$ref": "#/definitions/companiesGeoDistanceResponse"
+            }
+          },
+          "400": {
+            "decription": "Invalid Input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/endpoints": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Devolve o endpoint de todas as empresas",
+        "operationId": "companiesEndpoints",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "decription": "companiesEndpoint",
+            "schema": {
+              "$ref": "#/definitions/companiesEndepointsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/endpoint/{endpoint}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Devolve as infos da empresa dado o endpoint da url",
+        "operationId": "companiesEndpoint",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "endpoint",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "companiesEndpoint",
+            "schema": {
+              "$ref": "#/definitions/companiesEndepointResponse"
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/linkou/{endpoint}": {
+      "get": {
+        "tags": [
+          "Company"
+        ],
+        "description": "Devolve as infos da empresa dado o endpoint da url para a aplicação linkou",
+        "operationId": "companiesLinkou",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "endpoint",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "companiesEndpoint",
+            "schema": {
+              "$ref": "#/definitions/companiesLinkouResponse"
+            },
+            "400": {
+              "description": "Invalid input"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/category/{category}": {
+      "get": {
+        "tags": [
+          "Companies in category"
+        ],
+        "description": "Retorna todas as empresas dado uma categoria",
+        "operationId": "companyCategory",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [        
+          {
+            "in": "path",
+            "name": "category",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lat",
+            "type": "number",
+            "default": 0,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lng",
+            "type": "number",
+            "default": 1,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Companies in category",
+            "schema": {
+              "$ref": "#/definitions/companiesCategoryResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/v1/companies/products": {
+      "get": {
+        "tags": [
+          "Get products from companies"
+        ],
+        "description": "Lista todos os produtos de uma empresa. Se for um usuário logado dono de empresa, deve preencher a query com seu token. Caso contrário, deve ser enviado o id de uma empresa via query. Não devem ser preenchidos os dois campos.",
+        "operationId": "productsFromCompany",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "ID",
+            "type": "integer",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "productsFromCompany",
+            "schema": {
+              "$ref": "#/definitions/productsFromCompanyResponse"
+            },
+            "400": {
+              "decription": "Invalid Input",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "500": {
+              "description": "Internal error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/products/categories/{category}": {
+      "get": {
+        "tags": [
+          "Get products from company in category"
+        ],
+        "description": "Lista todos os produtos de uma empresa, dado uma categoria. Se for um usuário logado dono de empresa, deve preencher a query com seu token. Caso contrário, deve ser enviado o id de uma empresa via query. Não devem ser preenchidos os dois campos.",
+        "operationId": "productsCompanyCategory",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "token",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "ID",
+            "type": "integer",
+            "required": false
+          },
+          {
+            "in": "path",
+            "name": "category",
+            "type": "string",
+            "schema": {
+              "$ref": "#/definitions/categoryProductRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "productsCompanyCategory",
+            "schema": {
+              "$ref": "#/definitions/productsFromCompanyResponse"
+            }
+          },
+          "400": {
+            "decription": "Invalid Input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/{ID}/payments": {
+      "get": {
+        "tags": [
+          "Get all payment methods from company"
+        ],
+        "description": "Lista todos os métodos de pagamento de uma empresa",
+        "operationId": "getPaymentMethods",
+        "consumes": [
+          "params"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "All Payments",
+            "schema": {
+              "$ref": "#/definitions/getPaymentsResponse"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/visits": {
+      "post": {
+        "tags": [
+          "Create new visit"
+        ],
+        "operationId": "createVisit",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "ipv4",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateVisitRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "Nothing to be done"
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get":{
+        "tags": [
+          "Get visits from companies"
+        ],
+        "description": "Retorna as visitas das lojas enviadas no campo \"companies\" filtradas ou não por datas. Se \"companies\" não for enviado, retorna apenas as visitas da loja presente no token",
+        "operationId": "findVisits",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "companies",
+            "required": false,
+            "schema":{
+              "type": "array",
+              "example": "[1,2,3]"
+            }              
+          },
+          {
+            "in": "query",
+            "name": "before",
+            "required": false,
+            "schema":{
+              "type": "date"
+            }  
+          },
+          {
+            "in": "query",
+            "name": "after",
+            "required": false,
+            "schema":{
+              "type": "date"
+            } 
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "companyVisits",
+            "schema": {
+              "$ref": "#/definitions/companyVisitsResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/admin/companies/{ID}": {
+      "put": {
+        "tags": [
+          "Company for admin"
+        ],
+        "operationId": "updateCompany",
+        "description": "Atualiza uma empresa para o administrador",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateCompanyAdminRequest"
+            }
+          },          
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Company for admin"
+        ],
+        "description": "Retorna todos os dados de uma empresa para um usuário administrador",
+        "operationId": "infoOneCompany",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [       
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get info from one company",
+            "schema": {
+              "$ref": "#/definitions/companiesPageResponse"
+            }
+          },
+          "500": {
+            "description": "Internal error"
+          }
+        }
+      }
+    },
+    "/v1/admin/companies": {
+      "get": {
+        "tags": [
+          "Company for admin"
+        ],
+        "description": "Lista todas as empresas para um usuário administrador",
+        "operationId": "companiesPage",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer",
+            "minimum": 0,
+            "default": 1,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "type": "array",
+            "collectionFormat": "multi",
+            "items":{
+              "type": "string"},
+            "default": [],
+            "schema": {
+              "$ref": "#/definitions/companiesPageRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "Company",
+            "schema": {
+              "$ref": "#/definitions/allCompaniesPageResponse"
+            },
+            "400": {
+              "description": "Invalid input"
+            },
+            "401": {
+              "description": "Unauthorized"
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/companies/{ID}/images/banner": {
+      "put": {
+        "tags": [
+          "Company banner for admin"
+        ],
+        "description": "Atualiza o banner de uma empresa sendo admin",
+        "operationId": "updateCompanyBanner",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file",
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/definitions/UpdateCompanyBannerRequest"
+              }
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "decription": "Invalid Input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Company banner for admin"
+        ],
+        "description": "Delete o banner de uma empresa sendo admin",
+        "operationId": "deleteCompanyBanner",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/admin/companies/{ID}/images/logo": {
+      "put": {
+        "tags": [
+          "Company logo for admin"
+        ],
+        "description": "Atualiza o logo de uma empresa sendo admin",
+        "operationId": "updateCompanyLogo",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "formData",
+            "name": "file",
+            "required": true,
+            "type": "file",
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/definitions/UpdateCompanyBannerRequest"
+              }
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "decription": "Invalid Input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete logo de uma empresa sendo admin",
+        "tags": [
+          "Company logo for admin"
+        ],
+        "operationId": "deleteCompanyLogo",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Deleted"
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/neighborhoods": {
+      "get": {
+        "tags": [
+          "Get neighborhoods in cities"
+        ],
+        "description": "Lista todos os bairros de uma cidade",
+        "operationId": "neighborhoodCity",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "decription": "NeighborhoodCity",
+            "schema": {
+              "$ref": "#/definitions/neighborhoodCityResponse"
+            },
+            "500": {
+              "description": "Internal error"
+            }
+          }
+        }
+      }
+    },
+    "/v1/companies/mainshop": {
+      "get": {
+        "tags": [
+          "Show main company of region"
+        ],
+        "description": "Lista a empresa principal dentro de um raio dado uma latitude e uma longitude",
+        "operationId": "findMainCompany",
+        "consumes": [
+          "query"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "lat",
+            "type": "number",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "lng",
+            "type": "number",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "in": "query",
+            "name": "range",
+            "type": "number",
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "CompanyRegion",
+            "schema": {
+              "$ref": "#/definitions/mainCompanyRegionResponse"
+            }
+          }
+        }
+      }
+    }   
+  },
+  "definitions": {
+    "productsFromCompanyResponse": {
+      "type": "object",
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "company_id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              },
+              "promotion_price": {
+                "type": "number"
+              },
+              "category": {
+                "type": "string"
+              },
+              "subcategory": {
+                "type": "string"
+              },
+              "photo_key": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "bannerFromComapanyResponse": {
+      "type": "object",
+      "properties": {
+        "banner": {
+          "type": "string"
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "logoFromComapanyResponse": {
+      "type": "object",
+      "properties": {
+        "logo": {
+          "type": "string"
+        },
+        "bucketUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "companiesRegionPageResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "userId": {
+            "type": "number",
+            "format": "integer"
+          },
+          "document": {
+            "type": "string"
+          },
+          "fantasyName": {
+            "type": "string"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "streetNumber": {
+            "type": "integer"
+          },
+          "address2": {
+            "type": "string"
+          },
+          "delivery_range": {
+            "type": "string"
+          },
+          "endpoint": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "logo": {
+            "type": "string"
+          },
+          "bucket_url": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "companiesPageRequest": {
+        "field": {
+          "type": "array"
+        }
+      },
+    "companiesPageResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "user_id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "document": {
+          "type": "string"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "cep": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "delivery_range": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "banner": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "updated_by": {
+          "type": "string"
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "companiesGeoDistanceResponse": {
+      "type": "object",
+      "properties": {
+        "companies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "format": "integer"
+              },
+              "user_id": {
+                "type": "number",
+                "format": "integer"
+              },
+              "fantasy_name": {
+                "type": "string"
+              },
+              "cep": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "street": {
+                "type": "string"
+              },
+              "street_number": {
+                "type": "integer"
+              },
+              "address_2": {
+                "type": "string"
+              },
+              "delivery_range": {
+                "type": "string"
+              },
+              "logo": {
+                "type": "string"
+              },
+              "endpoint": {
+                "type": "string"
+              },
+              "phone_country_code": {
+                "type": "string"
+              },
+              "phone_area_code": {
+                "type": "string"
+              },
+              "phone_number": {
+                "type": "string"
+              },
+              "banner": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "total_products": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "companiesCategoryResponse": {
+      "type": "object",
+      "properties": {
+        "companies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "format": "integer"
+              },
+              "user_id": {
+                "type": "number",
+                "format": "integer"
+              },
+              "fantasy_name": {
+                "type": "string"
+              },
+              "cep": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "street": {
+                "type": "string"
+              },
+              "street_number": {
+                "type": "integer"
+              },
+              "address_2": {
+                "type": "string"
+              },
+              "delivery_range": {
+                "type": "string"
+              },
+              "neighborhood": {
+                "type": "string"
+              },
+              "logo": {
+                "type": "string"
+              },
+              "banner": {
+                "type": "string"
+              },
+              "endpoint": {
+                "type": "string"
+              },
+              "count_products": {
+                "type": "number"
+              },
+              "phone_country_code": {
+                "type": "number"
+              },
+              "phone_area_code": {
+                "type": "number"
+              },
+              "phone_number": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "companiesEndepointsResponse": {
+      "type": "array",
+      "items": {
+        "type" : "object",
+        "properties": {
+          "endpoint": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "companiesEndepointResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "user_id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "document": {
+          "type": "string"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "cep": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "delivery_range": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "banner": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "instagram_url": {
+          "type": "string"
+        },
+        "facebook_url": {
+          "type": "string"
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "companiesLinkouResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "banner": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "instagram_url": {
+          "type": "string"
+        },
+        "facebook_url": {
+          "type": "string"
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "allCompaniesPageResponse": {
+      "type": "object",
+      "properties": {
+        "bucket_url": {
+          "type": "string"
+        },
+        "companies":{
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "format": "integer"
+              },
+              "user_id": {
+                "type": "number",
+                "format": "integer"
+              },
+              "document": {
+                "type": "string"
+              },
+              "fantasy_name": {
+                "type": "string"
+              },
+              "cep": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "street": {
+                "type": "string"
+              },
+              "street_number": {
+                "type": "integer"
+              },
+              "address_2": {
+                "type": "string"
+              },
+              "delivery_range": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "longitude": {
+                "type": "number",
+                "format": "float"
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "updated_at": {
+                "type": "string"
+              },
+              "created_at": {
+                "type": "string"
+              },
+              "neighborhood": {
+                "type": "string"
+              },
+              "banner": {
+                "type": "string"
+              },
+              "logo": {
+                "type": "string"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "endpoint": {
+                "type": "string"
+              },
+              "phone_country_code": {
+                "type": "string"
+              },
+              "phone_area_code": {
+                "type": "string"
+              },
+              "phone_number": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "CreateCompanyRequest": {
+      "type": "object",
+      "properties": {
+        "cep": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "day": {
+                "type": "integer"
+              },
+              "open_time": {
+                "type": "string"
+              },
+              "close_time": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "category": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateCompanyAdminRequest": {
+      "type": "object",
+      "properties": {
+        "cep": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "day": {
+                "type": "integer"
+              },
+              "open_time": {
+                "type": "string"
+              },
+              "close_time": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "category": {
+          "type": "string"
+        },
+        "created_by": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateCompanyUserRequest": {
+      "type": "object",
+      "properties": {
+        "cep": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "schedule": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "day": {
+                "type": "integer"
+              },
+              "open_time": {
+                "type": "string"
+              },
+              "close_time": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "category": {
+          "type": "string"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "facebook_url": {
+          "type": "string"
+        },
+        "instagram_url": {
+          "type": "string"
+        }
+      }
+    },
+    "companiesNoLogResponse": {
+      "type": "object",
+      "properties": {
+        "fantasy_name": {
+          "type": "string"
+        },
+        "cep": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "delivery_range": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "longitude": {
+          "type": "number",
+          "format": "float"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "banner": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+    },
+    "idCompanyProductRequest": {
+      "type": "integer",
+      "description": "Numeric company ID to find products"
+    },
+    "categoryProductRequest": {
+      "type": "string",
+      "description": "Category to find products"
+    },
+    "UpdateCompanyBannerRequest": {
+      "type": "array",
+      "format": "binary"
+    },
+    "CreateVisitRequest": {
+      "type": "object",
+      "properties": {
+        "companyId": {
+          "type": "integer",
+          "required": true
+        }
+      }
+    },
+    "companyVisitsResponse":{
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "visits": {
+            "type": "number",
+            "format": "integer"
+          }
+        }
+      }
+    },
+    "neighborhoodCityResponse": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "type": "array",
+          "description": "Se existe uma cidade, pelo mennos um bairro será mostrado",
+          "items": "string"
+        }
+      }
+    },
+    "getPaymentsResponse": {
+      "type": "object",
+      "properties": {
+        "methods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "online": {
+                "type": "boolean"
+              },
+              "has_change": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "updateBannerAppRequest": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "updateLogoAppRequest": {
+      "type": "object",
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "errorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "mainCompanyRegionResponse":{
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "fantasy_name": {
+          "type": "string"
+        },
+        "endpoint": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "logo": {
+          "type": "string"
+        },         
+        "company_main_banners": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "banner_url_high_res": {
+                  "type": "string"
+                },
+                "banner_url_low_res": {
+                  "type": "string"
+                }
+              }
+            }
+        },
+        "bucket_url": {
+          "type": "string"
+        }
+      }
+
+     }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}

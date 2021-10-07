@@ -1,0 +1,405 @@
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+        />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.7.0"></script>
+    </head>
+    <style>
+        body {
+            margin: 0px;
+        }
+        .header {
+            padding: 27px 34px 0px 34px;
+            display: -webkit-box;
+        }
+
+        .store-image {
+            width: 61px;
+            height: 61px;
+            border-radius: 50%;
+            background-color: #1c3f62;
+            margin-right: 20px;
+        }
+
+        .store-image > img {
+            width: 61px;
+            height: 61px;
+            border-radius: 50%;
+        }
+
+        .wrapper-store-info {
+            display: grid;
+        }
+
+        .wrapper-store-info > p {
+            font-family: "Roboto", sans-serif;
+            color: #b4b4b4;
+            font-size: 13px;
+            line-height: 21px;
+            margin: 0px;
+        }
+
+        .insights-title {
+            font-family: "Roboto", sans-serif;
+            font-weight: 700;
+            color: #4d4d4d;
+            font-size: 15px;
+            line-height: 25px;
+            margin: 0px;
+            text-align: center;
+        }
+
+        .table-footer {
+            height: 50px;
+            background-color: #1c3f62;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .footer-span {
+            font-family: "Roboto", sans-serif;
+            color: #fff;
+            font-size: 13px;
+            line-height: 25px;
+        }
+
+        .footer-dolado {
+            width: 80px;
+            height: auto;
+        }
+
+        .td-chart {
+            position: relative;
+            height: 250px;
+            width: auto;
+        }
+
+        .td-chart-2 {
+            height: 350px;
+            width: 100%;
+        }
+    </style>
+    <body>
+        <div id="pageHeader-first" class="header">
+            <div class="store-image">
+                <img src={{ logo }} />
+            </div>
+            <div class="wrapper-store-info">
+                <p>{{ fantasy_name }}</p>
+                <p>{{ address }}</p>
+                <p>({{ phone_area_code }}) {{ phone_number }}</p>
+            </div>
+        </div>
+        <div id="pageHeader" style="padding-top: 10px;"></div>
+
+        <table style="width: 100%;">
+            <tbody>
+                <tr>
+                    <td>
+                        <p class="insights-title">Informações do seu Negócio</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p class="insights-title" style="font-weight: 400">
+                            {{ appliedFilter }}
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table
+            style="
+                width: 100%;
+                margin-top: 10px;
+            "
+        >
+            <tbody>
+                <tr style="margin-bottom: 20px">
+                    <td align="center">
+                        <div class="td-chart">
+                            <canvas id="pie-chart-1"></canvas>
+                        </div>
+                    </td>
+                    <td align="center">
+                        <div class="td-chart">
+                            <canvas id="pie-chart-2"></canvas>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <table style="width: 100%; margin-top: 20px">
+            <tbody>
+                <tr style="margin-bottom: 50px">
+                    <td width="100%" align="center">
+                        <div class="td-chart td-chart-2">
+                            <canvas id="bar-chart-1"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr style="margin-bottom: 50px">
+                    <td width="100%" align="center">
+                        <div class="td-chart td-chart-2">
+                            <canvas id="bar-chart-2"></canvas>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%" align="center">
+                        <div class="td-chart td-chart-2">
+                            <canvas id="bar-chart-3"></canvas>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table id="pageFooter" class="table-footer" style="width: 100%; padding: 0px 15px">
+            <tbody>
+                <tr>
+                    <td
+                        width="20%"
+                        style="text-align: left; padding-left: 15px"
+                    >
+                        <img
+                            class="footer-dolado"
+                            alt="dolado-logo"
+                            src="https://production-darez-api.s3.amazonaws.com/estatico/logo/dolado.png"
+                        />
+                    </td>
+                    <td style="text-align: center">
+                        <span class="footer-span"
+                            >Relatório gerado em {{ generateDate }} às {{ generateTime }}</span
+                        >
+                    </td>
+                    <td
+                        width="20%"
+                        style="text-align: right; padding-right: 15px"
+                    >
+                        <img
+                            class="footer-dolado"
+                            alt="dolado-logo"
+                            src="https://production-darez-api.s3.amazonaws.com/estatico/logo/dolado.png"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <script>
+            Chart.helpers.merge(Chart.defaults.global.plugins.datalabels, {
+                color: "#000",
+                textAlign: "center",
+                font: {
+                    weight: "bold",
+                    size: 12,
+                },
+            });
+
+            Chart.helpers.merge(Chart.defaults.global.title, {
+                fontSize: 15,
+                fontFamily: "Roboto",
+                fontColor: "#4d4d4d",
+                fontStyle: "normal",
+                lineHeight: "normal",
+            });
+            
+            new Chart(document.getElementById("pie-chart-1"), {
+                type: "pie",
+                data: {
+                    labels: "{{spendsReceipt.labels}}".split(','),
+                    datasets: [
+                        {
+                            backgroundColor: "{{spendsReceipt.colors}}".split(','),
+                            data: "{{spendsReceipt.data}}".split(','),
+                        },
+                    ],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: "Despesas e Receita (R$)",
+                    },
+                    animation: {
+                        duration: 0,
+                    },
+                },
+            });
+
+            new Chart(document.getElementById("pie-chart-2"), {
+                type: "pie",
+                data: {
+                    labels: "{{receiveGraph.labels}}".split(','),
+                    datasets: [
+                        {
+                            backgroundColor: "{{receiveGraph.colors}}".split(','),
+                            data: "{{receiveGraph.data}}".split(','),
+                        },
+                    ],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: "Tipo de Recebimento (R$ {{receiveGraph.totalValue}} - %)",
+                    },
+                    animation: {
+                        duration: 0,
+                    },
+                },
+            });
+        
+            new Chart(document.getElementById("bar-chart-1"), {
+                type: "bar",
+                data: {
+                    labels: "{{perDay.labels}}".split(','),
+                    datasets: [
+                        {
+                            backgroundColor: "{{perDay.colors}}".split(','),
+                            data: "{{perDay.data}}".split(','),
+                        },
+                    ],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        padding: 40,
+                        text: "Faturamento por dia do mês (R$)",
+                    },
+                    animation: {
+                        duration: 0,
+                    },
+                    plugins: {
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            offset: 1,
+                        },
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                gridLines: {
+                                    color: "rgba(197, 197, 197, 0.11)",
+                                },
+                            },
+                        ],
+                        yAxes: [
+                            {
+                                gridLines: {
+                                    color: "rgba(197, 197, 197, 0.11)",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+
+            new Chart(document.getElementById("bar-chart-2"), {
+                type: "bar",
+                data: {
+                    labels: "{{perWeek.labels}}".split(','),
+                    datasets: [
+                        {
+                            backgroundColor: "{{perWeek.colors}}".split(','),
+                            data: "{{perWeek.data}}".split(','),
+                        },
+                    ],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        padding: 40,
+                        text: "Faturamento por dia da semana (R$)",
+                    },
+                    animation: {
+                        duration: 0,
+                    },
+                    plugins: {
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            offset: 1,
+                        },
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                gridLines: {
+                                    color: "rgba(197, 197, 197, 0.11)",
+                                },
+                            },
+                        ],
+                        yAxes: [
+                            {
+                                gridLines: {
+                                    color: "rgba(197, 197, 197, 0.11)",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+
+            new Chart(document.getElementById("bar-chart-3"), {
+                type: "bar",
+                data: {
+                    labels: "{{perHour.labels}}".split(','),
+                    datasets: [
+                        {
+                            backgroundColor: "{{perHour.colors}}".split(','),
+                            data: "{{perHour.data}}".split(','),
+                        },
+                    ],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        padding: 40,
+                        text: "Faturamento por horário (R$)",
+                    },
+                    animation: {
+                        duration: 0,
+                    },
+                    plugins: {
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            offset: 1,
+                        },
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                                gridLines: {
+                                    color: "rgba(197, 197, 197, 0.11)",
+                                },
+                            },
+                        ],
+                        yAxes: [
+                            {
+                                gridLines: {
+                                    color: "rgba(197, 197, 197, 0.11)",
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+        </script>
+    </body>
+</html>

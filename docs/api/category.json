@@ -1,0 +1,134 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "DarezAPI description",
+      "version": "1.0.0",
+      "title": "DarezAPI"
+    },
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/v1/categories": {
+        "get": {
+          "tags": [
+                "Get all category"
+              ],
+            "description": "Lista todas as categorias. Se latutide e longitude forem enviadas na query ela devolve todas as categorias da região",
+            "operationId": "categories",
+            "consumes": [
+            "query"
+            ],
+            "produces": [
+            "application/json"
+            ],
+            "parameters": [
+                {
+                    "in": "query",
+                    "name": "lng",
+                    "required": false,
+                    "type": "string"
+                },
+                {
+                    "in": "query",
+                    "name": "lat",
+                    "type": "integer",
+                    "required": false
+                }
+            ],
+            "responses": {
+              "200": {
+                  "decription": "categories",
+                  "schema": {
+                  "$ref": "#/definitions/categoriesResponse"
+                  }
+              }
+            }
+        }
+      },
+      "/v1/categories/{category}/subcategories": {
+        "get": {
+          "tags": [
+                "Get all subcategory from category"
+              ],
+            "description": "Lista todas as subcategorias dada uma categoria.",
+            "operationId": "subcategories",
+            "consumes": [
+            "query"
+            ],
+            "produces": [
+            "application/json"
+            ],
+            "parameters": [
+                {
+                    "in": "path",
+                    "name": "category",
+                    "type": "string",
+                    "schema": {
+                      "type": "string"
+                    }
+                }
+            ],
+            "responses": {
+              "200": {
+                  "decription": "categories",
+                  "schema": {
+                  "$ref": "#/definitions/subcategoriesResponse"
+                  }
+              }
+            }
+        }
+      }
+    },
+    "definitions": {
+      "categoriesResponse": {
+          "type": "object",
+          "properties": {
+            "categories": {
+              "type": "array",
+              "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "icon": {
+                      "type": "string"
+                    },
+                    "banner": {
+                      "type": "string"
+                    }
+                  }
+              }
+            },
+            "bucket_url": {
+              "type": "string"
+            }
+          }
+      },
+      "subcategoriesResponse": {
+        "type": "array",
+        "items": {
+            "type": "object",
+              "properties": {
+                "name": {
+                    "type": "string"
+                }
+              }
+          }
+    },
+      "errorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Github page",
+      "url": "https://github.com/darez-company/darez-api"
+    }
+  }

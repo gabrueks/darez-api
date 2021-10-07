@@ -1,0 +1,277 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/payments": {
+      "post": {
+        "description": "Cria um pagamento para uma dada ordem",
+        "tags": ["Create payment"],
+        "operationId": "createPayment",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/createPaymentReq"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/companies": {
+      "post": {
+        "description": "Cria a conta de uma empresa na plataforma de pagamento Asaas",
+        "tags": [
+          "Create company account"
+        ],
+        "operationId": "createAccount",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Account created"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/balance": {
+      "get": {
+        "description": "Retorna o saldo de uma empresa na API de pagamentos",
+        "tags": [
+          "Get company balance"
+        ],
+        "operationId": "getBalance",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Company Info",
+            "schema": {
+              "$ref": "#/definitions/getBalanceResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/payments/transfers": {
+      "post": {
+        "description": "Cria uma transferência para uma conta de banco.\n**INFOS IMPORTANTES:**\n1- Valor minimo (*value*) é de R$ 6.00;\n2- Se for para uma conta de CNPJ/CPF diferente do cadastrado na plataforma, haverá cobrança extra de R$ 5.00;\n3- Os **únicos** valores possíveis para *account_type* são: 'CONTA_CORRENTE' ou 'CONTA_POUPANCA'.",
+        "tags": [
+          "Create transfer"
+        ],
+        "operationId": "createTransfer",
+        "consumes": [
+          "application/json"
+        ],"produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/createTransferReq"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Transfer created"
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "createPaymentReq": {
+      "type": "object",
+      "properties": {
+        "order_id": {
+          "type": "string"
+        },
+        "card_holder": {
+          "type": "object",
+          "properties": {
+            "document": {
+              "type": "string"
+            }
+          }
+        },
+        "credit_card": {
+          "type": "object",
+          "properties": {
+            "holder_name": {
+              "type": "string"
+            },
+            "number": {
+              "type": "string"
+            },
+            "expiry_month": {
+              "type": "string"
+            },
+            "expiry_year": {
+              "type": "string"
+            },
+            "ccv": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "getBalanceResponse": {
+      "type": "object",
+      "properties": {
+        "balance": {
+          "type": "number"
+        }
+      }
+    },
+    "createTransferReq": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "number"
+        },
+        "bank_code": {
+          "type": "string"
+        },
+        "owner_name": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "agency": {
+          "type": "string"
+        },
+        "account": {
+          "type": "string"
+        },
+        "account_digit": {
+          "type": "string"
+        },
+        "account_type": {
+          "type": "string"
+        }
+      }
+    },
+    "errorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}

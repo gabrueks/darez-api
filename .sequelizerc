@@ -1,0 +1,8 @@
+const path = require('path')
+
+module.exports = {
+  'config':          path.resolve('darez-api', 'config', 'sequelize.js'),
+  'migrations-path': path.resolve('darez-api', 'infrastructure', 'database', 'migrations'),
+  'models-path':     path.resolve('darez-api', 'infrastructure', 'database', 'models'),
+  'seeders-path':    path.resolve('darez-api', 'infrastructure', 'database', 'seeders'),
+}

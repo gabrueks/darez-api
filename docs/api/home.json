@@ -1,0 +1,164 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "DarezAPI description",
+        "version": "1.0.0",
+        "title": "DarezAPI"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/v1/home/banners": {
+            "get": {
+                "tags": [
+                    "Home"
+                ],
+                "description": "Obtem os banner das lojas da região informada.",
+                "operationId": "getBanners",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                      "in": "query",
+                      "name": "lat",
+                      "required": true,
+                      "type": "string",
+                      "description": "Latitude"
+                  },
+                  {
+                      "in": "query",
+                      "name": "lng",
+                      "type": "string",
+                      "required": true,
+                      "description": "Longitude"
+                    },
+                    {
+                        "in": "query",
+                        "name": "range",
+                        "type": "string",
+                        "required": false,
+                        "description": "Range"
+                      }  
+                ],              
+                "responses": {
+                    "200": {
+                        "decription": "Banners dentro da região informada",
+                        "schema": {
+                            "$ref": "#/definitions/bannerRegionResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/home/banners/mainbanner": {
+            "get": {
+                "tags": [
+                    "Home"
+                ],
+                "description": "Obtem os banner da principal loja da região.",
+                "operationId": "getBanners",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                      "in": "query",
+                      "name": "lat",
+                      "required": true,
+                      "type": "string",
+                      "description": "Latitude"
+                  },
+                  {
+                      "in": "query",
+                      "name": "lng",
+                      "type": "string",
+                      "required": true,
+                      "description": "Longitude"
+                    },
+                    {
+                        "in": "query",
+                        "name": "range",
+                        "type": "string",
+                        "required": false,
+                        "description": "Range"
+                      }  
+                ],              
+                "responses": {
+                    "200": {
+                        "decription": "Banners dentro da região informada",
+                        "schema": {
+                            "$ref": "#/definitions/mainBannerRegionResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "bannerRegionResponse": {   
+            "type": "object",
+            "properties": {
+              "banners": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                    "properties": {
+                      "banner_url_high_res": {
+                        "type": "string"
+                      },
+                      "banner_url_low_res": {
+                        "type": "string"
+                      },
+                      "main_banner": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "bucket_url": {
+                  "type": "string"
+                }
+            }
+        },
+        "mainBannerRegionResponse": {   
+            "type": "object",
+            "properties": {
+              "banners": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                    "properties": {
+                      "banner_url_high_res": {
+                        "type": "string"
+                      },
+                      "banner_url_low_res": {
+                        "type": "string"
+                      },
+                      "main_shop": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "bucket_url": {
+                  "type": "string"
+                }
+            }
+        },        
+        "errorMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Github page",
+        "url": "https://github.com/darez-company/darez-api"
+    }
+  }

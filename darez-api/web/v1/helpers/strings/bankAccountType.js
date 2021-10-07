@@ -1,0 +1,4 @@
+module.exports = {
+  CORRENTE: 'CONTA_CORRENTE',
+  POUPANCA: 'CONTA_POUPANCA',
+};

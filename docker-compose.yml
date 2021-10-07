@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  database:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password --sql_mode="NO_ENGINE_SUBSTITUTION"
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: darezdb
+      MYSQL_USER: darezuser
+      MYSQL_PASSWORD: darezpass
+    ports:
+      - 3307:3306
+
+volumes:
+  database: {}

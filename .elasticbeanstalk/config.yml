@@ -1,0 +1,8 @@
+branch-defaults:
+  ci/integration:
+    environment: DevelopDarezApi-env
+global:
+  application_name: develop-darez-api
+  default_platform: Node.js 12 running on 64bit Amazon Linux 2/5.1.0
+  default_region: us-east-1
+  sc: git

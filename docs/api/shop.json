@@ -1,0 +1,70 @@
+{
+  "swagger": "2.0",
+  "info": {
+      "description": "DarezAPI description",
+      "version": "1.0.0",
+      "title": "DarezAPI"
+  },
+  "schemes": [
+      "http",
+      "https"
+  ],
+  "paths": {
+      "/v1/companies/{ID}/open": {
+          "get": {
+              "tags": [
+                  "Shop"
+              ],
+              "description": "Obter informação se a loja está aberta.",
+              "operationId": "getShopHours",
+              "produces": [
+                  "application/json"
+              ],
+              "parameters": [
+                  {
+                    "in": "path",
+                    "name": "ID",
+                    "required": true,
+                    "type": "integer"
+                },
+                {
+                    "in": "query",
+                    "name": "DATETIME",
+                    "type": "string",
+                    "required": true
+                  }
+              ],              
+              "responses": {
+                  "200": {
+                      "decription": "shop",
+                      "schema": {
+                          "$ref": "#/definitions/shopOpenResponse"
+                      }
+                  }
+              }
+          }
+      }
+  },
+  "definitions": {
+      "shopOpenResponse": {
+          "type": "object",
+          "properties": {
+              "shop_open": {
+                  "type": "boolean"
+              }
+          }
+      },
+      "errorMessage": {
+          "type": "object",
+          "properties": {
+              "message": {
+                  "type": "string"
+              }
+          }
+      }
+  },
+  "externalDocs": {
+      "description": "Github page",
+      "url": "https://github.com/darez-company/darez-api"
+  }
+}

@@ -1,0 +1,606 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "DarezAPI description",
+      "version": "1.0.0",
+      "title": "DarezAPI"
+    },
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/v1/promotions/geo-distance": {
+        "get": {
+          "tags": [
+              "Promotions in region"
+            ],
+            "description": "Pega promoções em uma dada região",
+            "operationId": "promotionRegion",
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "query",
+                "name": "lat",
+                "type": "number",
+                "default": 0,
+                "schema": {
+                  "type": "number",
+                  "format": "float"
+                }
+              },
+              {
+                "in": "query",
+                "name": "lng",
+                "type": "number",
+                "default": 1,
+                "schema": {
+                  "type": "number",
+                  "format": "float"
+                }
+              },
+              {
+                "in": "query",
+                "name": "page",
+                "type": "integer",
+                "minimum": 0,
+                "default": 0,
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              {
+                "in": "query",
+                "name": "pageSize",
+                "type": "integer",
+                "minimum": 0,
+                "default": 1,
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "promotionRegion",
+                "schema": {
+                  "$ref": "#/definitions/promotionRegionResponse"
+                }
+              },
+              "401": {
+                "description": "Unauthorized",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              }
+            }
+        }
+      },
+      "/v1/promotions": {
+        "post": {
+            "tags": [
+                "Promotions"
+              ],
+              "description": "Cria uma nova promoção",
+              "operationId": "createPromotion",
+              "consumes": [
+                "application/json"
+              ],
+              "produces": [
+                "application/json"
+              ],
+              "parameters": [
+                {
+                  "in": "header",
+                  "name": "authorization",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "required": true
+                  }
+                },
+                {
+                  "in": "body",
+                  "name": "body",
+                  "required": true,
+                  "schema": {
+                    "$ref": "#/definitions/CreatePromotionRequest"
+                  }
+                }
+              ],
+              "responses": {
+                "201": {
+                  "description": "Created",
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "promotion_id": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                },
+                "400": {
+                  "description": "Bad Request",
+                  "schema": {
+                    "$ref": "#/definitions/errorMessage"
+                  }
+                },
+                "401": {
+                  "description": "Unauthorized",
+                  "schema": {
+                    "$ref": "#/definitions/errorMessage"
+                  }
+                }
+              }
+        }
+      },
+      "/v1/promotions/company/{ID}": {
+        "get": {
+          "tags": [
+              "Promotions"
+            ],
+            "description": "Pega promoções de uma empresa",
+            "operationId": "companyPromotion",
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "path",
+                "name": "ID",
+                "required": true,
+                "type": "integer"
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "companyPromotions",
+                "schema": {
+                  "$ref": "#/definitions/companyPromotionsResponse"
+                }
+              },
+              "401": {
+                "description": "Unauthorized",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              }
+            }
+        }
+      },
+      "/v1/promotions/{ID}": {
+        "put": {
+          "tags": [
+              "Promotions"
+            ],
+            "description": "Update de uma promoção",
+            "operationId": "updatePromotion",
+            "consumes": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "header",
+                "name": "authorization",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "required": true
+                }
+              },
+              {
+                "in": "body",
+                "name": "body",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/UpdatePromotionRequest"
+                }
+              },
+              {
+                "in": "path",
+                "name": "ID",
+                "required": true,
+                "type": "integer"
+              }
+            ],
+            "responses": {
+              "204": {
+                "description": "Updated"
+              },
+              "400": {
+                "description": "Bad Request",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              },
+              "401": {
+                "description": "Unauthorized",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              }
+            }
+      },
+      "get": {
+        "tags": [
+            "Promotions"
+          ],
+          "description": "Pega uma promoção",
+          "operationId": "findOnePromotion",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "findOnePromotion",
+              "schema": {
+                "$ref": "#/definitions/findOnePromotionResponse"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+              "Promotions"
+            ],
+            "description": "delete lógico de uma promoção",
+            "operationId": "deletePromotion",
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "header",
+                "name": "authorization",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "required": true
+                }
+              },
+              {
+                "in": "path",
+                "name": "ID",
+                "required": true,
+                "type": "integer"
+              }
+            ],
+            "responses": {
+              "204": {
+                "description": "Deleted"
+              },
+              "401": {
+                "description": "Unauthorized",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              }
+            }
+          }
+      }
+    },
+    "definitions": {
+      "CreatePromotionRequest": {
+        "type": "object",
+        "properties": {
+            "discount": {
+                "type": "number"
+            },
+            "has_limit_date": {
+                "type": "boolean"
+            },
+            "date_start": {
+                "type": "string"
+            },
+            "date_end": {
+                "type": "string"
+            },
+            "products": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "promotion_price": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+            }
+      },
+      "UpdatePromotionRequest": {
+        "type": "object",
+        "properties": {
+            "discount": {
+                "type": "number"
+            },
+            "has_limit_date": {
+                "type": "boolean"
+            },
+            "date_start": {
+                "type": "string"
+            },
+            "date_end": {
+                "type": "string"
+            },
+            "products": {
+              "type": "object",
+              "properties": {
+                "add": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "promotion_price": {
+                          "type": "number"
+                        }
+                    }
+                  }
+                },
+                "delete": {
+                  "type": "array",
+                  "items": {
+                      "type": "integer"
+                  }
+                }
+              }
+                
+            }
+        }
+      },
+      "promotionRegionResponse": {
+        "type": "object",
+        "properties": {
+          "promotion": {
+            "type": "array",
+            "items": {
+              "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "company_id": {
+                    "type": "integer"
+                  },
+                  "discount": {
+                    "type": "number"
+                  },
+                  "has_limit_date": {
+                    "type": "boolean"
+                  },
+                  "date_start": {
+                      "type": "string"
+                  },
+                  "date_end": {
+                      "type": "string"
+                  },
+                  "created_by": {
+                    "type": "string"
+                  },
+                  "distance": {
+                    "type": "number"
+                  },
+                  "company_endpoint": {
+                    "type": "string"
+                  },
+                  "products": {
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "string"
+                            },
+                            "category": {
+                              "type": "string"
+                            },
+                            "subcategory": {
+                              "type": "string"
+                            },
+                            "created_by": {
+                              "type": "string"
+                            },
+                            "photo_key": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                      }
+                  }
+                }
+              }
+            },
+            "bucket_url": {
+              "type": "string"
+            }
+        }
+      },
+      "companyPromotionsResponse": {
+        "type": "object",
+        "properties": {
+          "promotion": {
+            "type": "array",
+            "items": {
+              "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "company_id": {
+                    "type": "integer"
+                  },
+                  "discount": {
+                    "type": "number"
+                  },
+                  "has_limit_date": {
+                    "type": "boolean"
+                  },
+                  "date_start": {
+                      "type": "string"
+                  },
+                  "date_end": {
+                      "type": "string"
+                  },
+                  "created_by": {
+                    "type": "string"
+                  },
+                  "products": {
+                      "type": "array",
+                      "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "description": {
+                              "type": "string"
+                            },
+                            "price": {
+                              "type": "string"
+                            },
+                            "category": {
+                              "type": "string"
+                            },
+                            "subcategory": {
+                              "type": "string"
+                            },
+                            "created_by": {
+                              "type": "string"
+                            },
+                            "photo_key": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                      }
+                  }
+                }
+              }
+            },
+            "bucket_url": {
+              "type": "string"
+            }
+        }
+    },
+      "findOnePromotionResponse": {
+        "type": "object",
+        "properties": {
+          "promotion": {
+            "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "company_id": {
+                  "type": "integer"
+                },
+                "discount": {
+                  "type": "number"
+                },
+                "has_limit_date": {
+                  "type": "boolean"
+                },
+                "date_start": {
+                    "type": "string"
+                },
+                "date_end": {
+                    "type": "string"
+                },
+                "created_by": {
+                  "type": "string"
+                },
+                "products": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "category": {
+                            "type": "string"
+                          },
+                          "subcategory": {
+                            "type": "string"
+                          },
+                          "created_by": {
+                            "type": "string"
+                          },
+                          "photo_key": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                }
+            },
+            "bucket_url": {
+              "type": "string"
+            }
+        }
+      },
+      "errorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Github page",
+      "url": "https://github.com/darez-company/darez-api"
+    }
+  }

@@ -1,0 +1,360 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "DarezAPI description",
+        "version": "1.0.0",
+        "title": "DarezAPI"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "paths": {
+        "/v1/search/index/companies": {
+            "get": {
+                "tags": [
+                    "Algolia"
+                ],
+                "description": "Obter os dados de Empresa para gerar o arquivo indexado do Algolia",
+                "operationId": "companyIndex",
+                "consumes": [
+                    "body"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "decription": "companies",
+                        "schema": {
+                            "$ref": "#/definitions/companiesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/companies/{search}": {
+            "post": {
+                "tags": [
+                    "Algolia"
+                ],
+                "description": "Obtem informações de um dado (string) de Empresa no Algolia",
+                "operationId": "companySearch",
+                "consumes": [
+                    "body"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "search",
+                        "type": "string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/searchCoordinates"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "decription": "companies",
+                        "schema": {
+                            "$ref": "#/definitions/companiesResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/clear/companies": {
+            "get": {
+                "tags": [
+                    "Algolia"
+                ],
+                "description": "Limpar os dados de Empresas do Algolia",
+                "operationId": "companyClean",
+                "consumes": [
+                    "query"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Cleared"
+                    }
+                }
+            }
+        },
+        "/v1/search/index/products": {
+            "get": {
+                "tags": [
+                    "Algolia"
+                ],
+                "description": "Obter os dados de Produtos para gerar o arquivo indexado do Algolia",
+                "operationId": "productndex",
+                "consumes": [
+                    "query"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "decription": "products",
+                        "schema": {
+                            "$ref": "#/definitions/productsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/products/{search}": {
+            "post": {
+                "tags": [
+                    "Algolia"
+                ],
+                "description": "Obtem informações de um dado (string) de Produtos no Algolia",
+                "operationId": "productsSearch",
+                "consumes": [
+                    "body"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "search",
+                        "type": "string",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/searchCoordinates"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "decription": "products",
+                        "schema": {
+                            "$ref": "#/definitions/productsResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/search/clear/products": {
+            "get": {
+                "tags": [
+                    "Algolia"
+                ],
+                "description": "Limpar os dados de Products do Algolia",
+                "operationId": "productClean",
+                "consumes": [
+                    "query"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Cleared"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "searchCoordinates": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "type": "integer"
+                },
+                "longitude": {
+                    "type": "integer"
+                }
+            }
+        },
+        "productsResponse": {
+            "properties":{
+                "bucket_url": {
+                    "type": "string"
+                },
+                "products": {
+                    "$ref": "#/definitions/productsResponseList"
+                  }
+            }            
+        },
+        "productsResponseList": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "objectID": {
+                        "type": "integer"
+                    },
+                    "company_id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "price": {
+                        "type": "number"
+                    },
+                    "category": {
+                        "type": "string"
+                    },
+                    "subcategory": {
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "type": "integer"
+                    },
+                    "photos": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "fantasy_name": {
+                        "type": "string"
+                    },
+                    "delivery_range": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "integer"
+                    },
+                    "longitude": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "companiesResponse": {
+            "properties":{
+                "bucket_url": {
+                    "type": "string"
+                },
+                "products": {
+                    "$ref": "#/definitions/companiesResponseList"
+                  }
+            }            
+        },
+        "companiesResponseList": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "objectID": {
+                        "type": "integer"
+                    },
+                    "id": {
+                        "type": "integer"
+                    },
+                    "document": {
+                        "type": "string"
+                    },
+                    "fantasy_name": {
+                        "type": "string"
+                    },
+                    "cep": {
+                        "type": "string"
+                    },
+                    "street": {
+                        "type": "string"
+                    },
+                    "street_number": {
+                        "type": "integer"
+                    },
+                    "neighborhood": {
+                        "type": "string"
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "deliver_range": {
+                        "type": "integer"
+                    },
+                    "latitude": {
+                        "type": "integer"
+                    },
+                    "longitude": {
+                        "type": "integer"
+                    },
+                    "banner": {
+                        "type": "string"
+                    },
+                    "logo": {
+                        "type": "string"
+                    },
+                    "created_by": {
+                        "type": "string"
+                    },
+                    "endpoint": {
+                        "type": "string"
+                    },
+                    "phone_country_code": {
+                        "type": "string"
+                    },
+                    "phone_area_code": {
+                        "type": "string"
+                    },
+                    "phone_number": {
+                        "type": "string"
+                    },
+                    "updated_by": {
+                        "type": "string"
+                    },
+                    "active": {
+                        "type": "integer"
+                    },
+                    "created_at": {
+                        "type": "string"
+                    },
+                    "updated_at": {
+                        "type": "string"
+                    },
+                    "total_products": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "errorMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Github page",
+        "url": "https://github.com/darez-company/darez-api"
+    }
+}

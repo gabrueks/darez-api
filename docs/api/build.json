@@ -1,0 +1,47 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/build": {
+      "get": {
+        "tags": ["Get all info to build"],
+        "description": "Salva as informações necessárias para o build do frontend em um arquivo json no S3",
+        "operationId": "buildAllInfos",
+        "produces": ["application/json"],
+        "responses": {
+          "201": {
+            "description": "File created",
+            "schema": {
+              "$ref": "#/definitions/buildResponseBody"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "buildResponseBody": {
+      "type": "object",
+      "properties": {
+        "bucket_url": {
+          "type": "string"
+        },
+        "file_key": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}

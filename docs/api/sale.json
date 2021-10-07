@@ -1,0 +1,435 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/sales": {
+      "post": {
+        "tags": [
+          "Sale"
+        ],
+        "description": "Cria nova venda para uma loja - formato de data 00/00/00 - formato de hora 00:00. Métodos de vendas (sale_method) disponíveis: Crédito, Débito, Dinheiro, Despesa",
+        "operationId": "PostSale",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PostSaleRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "description": "Devolve todas as vendas de empresa - sale_time no formato: YYYY-MM-DD HH:MM:SS0Z",
+        "operationId": "getSale",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "salesFromCompany",
+            "schema": {
+              "$ref": "#/definitions/getCompanySalesResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/range": {
+      "get": {
+        "tags": [
+          "Sales"
+        ],
+        "description": "Devolve todas as vendas de empresa que aconteceram em um determinado espaço de tempo - sale_time no formato: YYYY-MM-DD HH:MM:SS0Z",
+        "operationId": "getSaleRange",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "required": true,
+            "default": "01/01/2021",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "type": "string",
+            "default": "01/01/2021",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "salesInRange",
+            "schema": {
+              "$ref": "#/definitions/getCompanySalesResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/{ID}": {
+      "put": {
+        "tags": [
+          "Sale"
+        ],
+        "description": "Update de uma venda - formato de data 00/00/0000 - formato de hora 00:00. Métodos de vendas (sale_method) disponíveis: Crédito, Débito, Dinheiro, Despesa",
+        "operationId": "PutSale",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutSaleRequest"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "saleUpdate"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Sale"
+        ],
+        "description": "Devolve uma venda pelo id dela - sale_time no formato: YYYY-MM-DD HH:MM:SS0Z",
+        "operationId": "sale",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "saleById",
+            "schema": {
+              "$ref": "#/definitions/getSaleByIdResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Sale"
+        ],
+        "description": "Delete logico de uma sale",
+        "operationId": "DeleteSale",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "saleUpdate"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/sales/methods": {
+      "get": {
+        "tags": [
+          "Sales Methods"
+        ],
+        "description": "Devolve todos os métodos de venda disponíveis. Crédito, Débito, Dinheiro, Despesa",
+        "operationId": "getSalesMethods",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "salesMethods",
+            "schema": {
+              "$ref": "#/definitions/getCompanySalesMethods"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "PostSaleRequest": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "integer"
+        },
+        "price": {
+          "type": "number"
+        },
+        "sale_method": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "split_times": {
+          "type": "integer"
+        }
+      }
+    },
+    "getCompanySalesResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": "integer"
+          },
+          "price": {
+            "type": "number"
+          },
+          "sale_method": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "sale_time": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "PutSaleRequest": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "integer"
+        },
+        "price": {
+          "type": "number"
+        },
+        "sale_method": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        }
+      }
+    },
+    "getSaleByIdResponse": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "type": "integer"
+        },
+        "price": {
+          "type": "number"
+        },
+        "sale_method": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "sale_time": {
+          "type": "string"
+        }
+      }
+    },
+    "getCompanySalesMethods": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "operator": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "errorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}

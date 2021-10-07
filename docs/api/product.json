@@ -1,0 +1,1385 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "DarezAPI description",
+      "version": "1.0.0",
+      "title": "DarezAPI"
+    },
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/v1/products": {
+        "post": {
+          "tags": [
+            "Product"
+          ],
+          "description": "Cria um novo produto",
+          "operationId": "createProduct",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/CreateProductRequest"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Created",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product_id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Delete lógico de um produto, se tiver mais de um rpoduto para deletar insira os ids separados por virgula. Ex: path/1,2,3,4",
+          "tags": [
+            "Product"
+          ],
+          "operationId": "deleteProduct",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [   
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },    
+            {
+              "in": "body",
+              "name": "products_ids_list",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "products_ids_list": {
+                    "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                  }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/products/{ID}": {
+        "put": {
+            "description": "Atualiza um produto. Se uma nova variação pecisar ser inserida, basta não enviar o ID para essa variação",
+            "tags": [
+              "Product"
+            ],
+            "operationId": "updateProduct",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "header",
+                "name": "authorization",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "required": true
+                }
+              },
+              {
+                "in": "body",
+                "name": "body",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/updateProductRequest"
+                }
+              },          
+              {
+                "in": "path",
+                "name": "ID",
+                "required": true,
+                "type": "integer"
+              }
+            ],
+            "responses": {
+              "204": {
+                "description": "Updated"
+              },
+              "400": {
+                "description": "Bad Request",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              },
+              "401": {
+                "description": "Unauthorized",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              }
+            }
+          },
+        "get": {
+          "description": "Devolve as informações de um produto dado seu id",
+          "tags": [
+            "Product"
+          ],
+          "operationId": "getProduct",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [        
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Product Info",
+              "schema": {
+                "$ref": "#/definitions/getProductRequest"
+              }
+            }
+          }
+        }
+      },
+      "/v1/products/{ID}/variations": {
+        "get": {
+          "tags": [
+            "Product"
+          ],
+          "operationId": "productVariations",
+          "description": "Devolve todas as variações ativas de um produto",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "decription": "productVariations",
+              "schema": {
+                "$ref": "#/definitions/productVariationsResponse"
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Delete lógico de uma ou mais variações de um produto",
+          "tags": [
+            "Product"
+          ],
+          "operationId": "deleteProductVariation",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [   
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },    
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/deleteProductVariationRequest"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/products/{ID}/images": {
+        "put": {
+            "description": "Adiciona imagens de um produto. A versão de swagger não permite o upload de mais de uma imagem por vez. Porém a aplicação aceita mais de um arquivo por vez.",
+            "tags": [
+              "Product images"
+            ],
+            "operationId": "updateProductImage",
+            "consumes": [
+              "multipart/form-data"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+              {
+                "in": "header",
+                "name": "authorization",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "required": true
+                }
+              },
+              {
+                "in": "formData",
+                "name": "files",
+                "required": true,
+                "type": "file",
+                "multipart/form-data": {
+                  "schema": {
+                    "$ref": "#/definitions/UpdateProductImageRequest"
+                  }
+                }
+              },
+              {
+                "in": "path",
+                "name": "ID",
+                "required": true,
+                "schema": {
+                  "$ref": "#/definitions/UpdateProductImagePathRequest"
+                }
+              }
+            ],
+            "responses": {
+              "204": {
+                "description": "Updated"
+              },
+              "401": {
+                "description": "Unauthorized",
+                "schema": {
+                  "$ref": "#/definitions/errorMessage"
+                }
+              }
+            }
+          },
+        "get": {
+          "tags": [
+            "Product images"
+          ],
+          "operationId": "imageFromProduct",
+          "description": "Pega as imagens do produto cujo id foi passado. Para visualizar a imagem, basta concatenar bucket_url+photo_key.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "decription": "imageFromProduct",
+              "schema": {
+                "$ref": "#/definitions/ImageFromProductResponse"
+              }
+            }
+          }
+        },
+        "delete": {
+          "description": "Delete de uma ou mais imagens de um produto",
+          "tags": [
+            "Product images"
+          ],
+          "operationId": "deleteProductImage",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/DeleteProductImageRequest"
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpdateProductImagePathRequest"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Deleted"
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/app/products/{ID}/images": {
+        "put": {
+          "description": "Adiciona imagens de um produto para o app.",
+          "tags": [
+            "Product images"
+          ],
+          "operationId": "updateProductImageApp",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpadteProductImageAppRequest"
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpdateProductImagePathRequest"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Updated"
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/products/subcategory/companies/{ID}": {
+        "get": {
+          "tags": [
+            "Get count products in subcategory from company"
+          ],
+          "operationId": "productSubcategoryCompany",
+          "description": "Devolve a contagem de produtos em cada subcategoria de cada categoria de uma empresa",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "decription": "productSubcategoryCompany",
+              "schema": {
+                "$ref": "#/definitions/productSubcategoryCompanyResponse"
+              }
+            }
+          }
+        }
+      },
+      "/v1/products/user/preferences": {
+        "get": {
+          "tags": [
+            "Get products - preferences"
+          ],
+          "operationId": "productUserPreferences",
+          "description": "Devolve os prudutos baseado nas preferências do usuário se promotion vier null não tem promoção para esse produto. Se product_page e category_page vierem null o usuário não tem registro de entradas nessas páginas",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "query",
+              "name": "lat",
+              "type": "number",
+              "schema": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            {
+              "in": "query",
+              "name": "lng",
+              "type": "number",
+              "schema": {
+                "type": "number",
+                "format": "float"
+              }
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "type": "number",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "format": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "pageSize",
+              "type": "number",
+              "required": false,
+              "schema": {
+                "type": "number",
+                "format": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "decription": "productUserPreferences",
+              "schema": {
+                "$ref": "#/definitions/productUserPreferencesResponse"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/products/sorting": {
+        "post": {
+          "tags": [
+            "Trocar ordernação do produto"
+          ],
+          "operationId": "sorting",
+          "description": "Faz a troca da ordenação do produto",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "type":"object",
+                "properties":{
+                  "id":{
+                    "type": "integer"
+                  },
+                  "old_sort_id":{
+                    "type": "integer"
+                  },
+                  "new_sort_id":{
+                    "type": "integer"
+                  }
+
+                }                
+              }
+            }          
+          ],
+          "responses": {
+            "204": {
+              "decription": "No Content"
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "UpadteProductImageAppRequest": {
+        "type": "object",
+        "properties": {
+          "files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "file": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "getProductRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "promotion_price": {
+            "type": "number"
+          },
+          "category": {
+            "type": "string"
+          },
+          "subcategory": {
+            "type": "string"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "deleted_at": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "promotion_id": {
+            "type": "integer"
+          },
+          "promotion_discount": {
+            "type": "number"
+          },
+          "promotion_has_limit_date": {
+            "type": "string"
+          },
+          "promotion_date_start": {
+            "type": "string"
+          },
+          "promotion_date_end": {
+            "type": "string"
+          },
+          "promotion_created_by": {
+            "type": "string"
+          }
+        }
+      },
+      "productsFromCompanyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "promotion_price": {
+            "type": "number"
+          },
+          "category": {
+            "type": "string"
+          },
+          "subcategory": {
+            "type": "string"
+          },
+          "promotion_id": {
+            "type": "integer"
+          },
+          "promotion_discount": {
+            "type": "number"
+          },
+          "promotion_has_limit_date": {
+            "type": "string"
+          },
+          "promotion_date_start": {
+            "type": "string"
+          },
+          "promotion_date_end": {
+            "type": "string"
+          },
+          "promotion_created_by": {
+            "type": "string"
+          },
+          "photo_key": {
+            "type": "string"
+          }
+        }
+      },
+      "productUserPreferencesResponse": {
+        "type": "object",
+        "properties": {
+          "recent": {
+            "type": "object",
+            "properties": {
+              "product_page": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "company_id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "promotion_price": {
+                          "type": "number"
+                        },
+                        "category": {
+                          "type": "string"
+                        },
+                        "subcategory": {
+                          "type": "string"
+                        },
+                        "promotion": {
+                          "type": "object",
+                          "properties":{
+                            "id": {
+                              "type": "integer"
+                            },
+                            "discount": {
+                              "type": "number"
+                            },
+                            "has_limit_date": {
+                              "type": "integer"
+                            },
+                            "date_start": {
+                              "type": "string"
+                            },
+                            "date_end": {
+                              "type": "string"
+                            },
+                            "created_by": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "distance": {
+                          "type": "integer"
+                        },
+                        "company_endpoint": {
+                          "type": "string"
+                        },
+                        "photo_key": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "category_page": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "company_id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "promotion_price": {
+                          "type": "number"
+                        },
+                        "category": {
+                          "type": "string"
+                        },
+                        "subcategory": {
+                          "type": "string"
+                        },
+                        "promotion": {
+                          "type": "object",
+                          "properties":{
+                            "id": {
+                              "type": "integer"
+                            },
+                            "discount": {
+                              "type": "number"
+                            },
+                            "has_limit_date": {
+                              "type": "integer"
+                            },
+                            "date_start": {
+                              "type": "string"
+                            },
+                            "date_end": {
+                              "type": "string"
+                            },
+                            "created_by": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "distance": {
+                          "type": "integer"
+                        },
+                        "company_endpoint": {
+                          "type": "string"
+                        },
+                        "photo_key": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "object",
+            "properties": {
+              "product_page": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "company_id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "promotion_price": {
+                          "type": "number"
+                        },
+                        "category": {
+                          "type": "string"
+                        },
+                        "subcategory": {
+                          "type": "string"
+                        },
+                        "promotion": {
+                          "type": "object",
+                          "properties":{
+                            "id": {
+                              "type": "integer"
+                            },
+                            "discount": {
+                              "type": "number"
+                            },
+                            "has_limit_date": {
+                              "type": "integer"
+                            },
+                            "date_start": {
+                              "type": "string"
+                            },
+                            "date_end": {
+                              "type": "string"
+                            },
+                            "created_by": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "distance": {
+                          "type": "integer"
+                        },
+                        "company_endpoint": {
+                          "type": "string"
+                        },
+                        "photo_key": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "category_page": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "company_id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "number"
+                        },
+                        "promotion_price": {
+                          "type": "number"
+                        },
+                        "category": {
+                          "type": "string"
+                        },
+                        "subcategory": {
+                          "type": "string"
+                        },
+                        "promotion": {
+                          "type": "object",
+                          "properties":{
+                            "id": {
+                              "type": "integer"
+                            },
+                            "discount": {
+                              "type": "number"
+                            },
+                            "has_limit_date": {
+                              "type": "integer"
+                            },
+                            "date_start": {
+                              "type": "string"
+                            },
+                            "date_end": {
+                              "type": "string"
+                            },
+                            "created_by": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "distance": {
+                          "type": "integer"
+                        },
+                        "company_endpoint": {
+                          "type": "string"
+                        },
+                        "photo_key": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "count": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          },
+          "bucket_url": {
+            "type": "string"
+          }
+        }
+      },
+      "productPhotosRequest": {
+        "type": "query",
+        "properties": {
+          "id": {
+            "type": "integer"
+          }
+        }
+      },
+      "deleteProductVariationRequest": {
+        "type": "object",
+        "properties": {
+          "product_variation": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "productPhotosResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "product_id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "photo_key": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      },
+      "idCompanyProductRequest": {
+        "type": "integer",
+        "description": "Numeric company ID to find products"
+      },
+      "categoryProductRequest": {
+        "type": "string",
+        "description": "Category to find products"
+      },
+      "updateProductRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "category": {
+            "type": "string"
+          },
+          "subcategory": {
+            "type": "string"
+          },
+          "hidden": {
+            "type": "boolean"
+          },
+          "variations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "color": {
+                  "type": "string"
+                },
+                "size": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "main_image": {
+            "type": "integer"
+          }
+        }
+      },
+      "productSubcategoryCompanyResponse": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "object",
+            "properties": {
+              "subcategory_name": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "productsCompanyCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "company_id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "promotion_price": {
+            "type": "number"
+          },
+          "category": {
+            "type": "string"
+          },
+          "subcategory": {
+            "type": "string"
+          },
+          "promotion_id": {
+            "type": "integer"
+          },
+          "promotion_discount": {
+            "type": "number"
+          },
+          "promotion_has_limit_date": {
+            "type": "string"
+          },
+          "promotion_date_start": {
+            "type": "string"
+          },
+          "promotion_date_end": {
+            "type": "string"
+          },
+          "promotion_created_by": {
+            "type": "string"
+          },
+          "photo_key": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateProductRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "description": {
+            "type": "string",
+            "required": false,
+            "accept": null
+          },
+          "price": {
+            "type": "number",
+            "required": true
+          },
+          "category": {
+            "type": "string",
+            "required": true
+          },
+          "subcategory": {
+            "type": "string",
+            "required": true
+          },
+          "variations": {
+            "type": "array",
+            "required": false,
+            "accept": null,
+            "description": "Caso tenha variação, existem campos obrigatórios",
+            "items": {
+              "type": "object",
+              "properties": {
+                "color": {
+                  "type": "string",
+                  "accept": null
+                },
+                "size": {
+                  "type": "string",
+                  "accept": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "ImageFromProductResponse": {
+        "type": "object",
+        "properties": {
+          "bucket_url": {
+            "type": "string",
+            "description": "Url que contem as imagens"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "description": "Id unico da imagem"
+                },
+                "photo_key": {
+                  "type": "string",
+                  "description": "Endpoint especifico para a imagem"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateProductImageRequest": {
+        "type": "array",
+        "format": "binary"
+      },
+      "DeleteProductImageRequest": {
+        "type": "object",
+        "properties": {
+          "image_id": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "UpdateProductImagePathRequest": {
+        "type": "integer",
+        "description": "Numeric user ID to update full name"
+      },
+      "productVariationsResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "color": {
+              "type": "string"
+            },
+            "size": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "errorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Github page",
+      "url": "https://github.com/darez-company/darez-api"
+    }
+  }

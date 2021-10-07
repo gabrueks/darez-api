@@ -1,0 +1,93 @@
+{
+  "swagger": "2.0",
+  "info": {
+      "description": "DarezAPI description",
+      "version": "1.0.0",
+      "title": "DarezAPI"
+  },
+  "schemes": [
+      "http",
+      "https"
+  ],
+  "paths": {
+      "/v1/reports/sales": {
+          "get": {
+              "tags": [
+                  "ReportSales"
+              ],
+              "description": "Retorna um relatorio das vendas dentro de um limite de datas.",
+              "operationId": "getReportSales",
+              "produces": [
+                  "application/json"
+              ],
+              "parameters": [
+                {
+                  "in": "header",
+                  "name": "authorization",
+                  "required": true,
+                  "schema": {
+                    "type": "string",
+                    "required": true
+                  }
+                },
+                {
+                  "in": "query",
+                  "name": "start",
+                  "required": true,
+                  "default": "01/01/2021",
+                  "type": "string"
+                },
+                {
+                  "in": "query",
+                  "name": "end",
+                  "type": "string",
+                  "default": "01/01/2021",
+                  "required": true
+                }
+              ],              
+              "responses": {
+                  "200": {
+                      "decription": "shop",
+                      "schema": {
+                          "$ref": "#/definitions/kadernetResponse"
+                      }
+                  },
+                  "400": {
+                    "description": "Bad Request",
+                    "schema": {
+                      "$ref": "#/definitions/errorMessage"
+                    }
+                  },
+                  "401": {
+                    "description": "Unauthorized",
+                    "schema": {
+                      "$ref": "#/definitions/errorMessage"
+                    }
+                  }
+              }
+          }
+      }
+  },
+  "definitions": {
+      "kadernetResponse": {
+          "type": "object",
+          "properties": {
+              "report": {
+                  "type": "string"
+              }
+          }
+      },
+      "errorMessage": {
+          "type": "object",
+          "properties": {
+              "message": {
+                  "type": "string"
+              }
+          }
+      }
+  },
+  "externalDocs": {
+      "description": "Github page",
+      "url": "https://github.com/darez-company/darez-api"
+  }
+}

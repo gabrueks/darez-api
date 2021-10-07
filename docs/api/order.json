@@ -1,0 +1,1048 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "DarezAPI description",
+      "version": "1.0.0",
+      "title": "DarezAPI"
+    },
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/v1/orders": {
+        "post": {
+          "tags": [
+            "Order"
+          ],
+          "description": "Cria uma nova transação",
+          "operationId": "createOrder",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/createOrderRequest"
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Created",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "order_id": {
+                    "type": "integer"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "409": {
+              "description": "Distance Bigger than the Allowed",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/orders/{ID}/status": {
+        "put": {
+          "tags": [
+            "Order"
+          ],
+          "description": "Modifica o status de uma transação",
+          "operationId": "updateOrderStatus",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpdateOrderStatusRequest"
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UpdateOrderStatusPathRequest"
+              }
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "Updated"
+            },
+            "400": {
+              "description": "Bad Request",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/orders/company": {
+        "get": {
+          "tags": [
+            "Get company orders"
+          ],
+          "description": "Pega dados das trasações de uma empresa para usuário logado",
+          "operationId": "companyOrders",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "pageSize",
+              "type": "integer",
+              "minimum": 0,
+              "default": 1,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "initialDate",
+              "type": "string"
+            },
+            {
+              "in": "query",
+              "name": "endDate",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Orders from company",
+              "schema": {
+                "$ref": "#/definitions/companyOrdersResponse"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/orders/user": {
+        "get": {
+          "tags": [
+            "Get user orders"
+          ],
+          "description": "Pega dados das trasações de um usuário quando o mesmo estiver logado",
+          "operationId": "userOrders",
+          "consumes": [
+            "query"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "pageSize",
+              "type": "integer",
+              "minimum": 0,
+              "default": 1,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "initialDate",
+              "type": "string"
+            },
+            {
+              "in": "query",
+              "name": "endDate",
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Orders from user",
+              "schema": {
+                "$ref": "#/definitions/userOrdersResponse"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/orders/{ID}": {
+        "get": {
+          "tags": [
+            "Order"
+          ],
+          "description": "Pega dados de uma trasação para usuários e empresas",
+          "operationId": "oneOrderUserCompany",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "one Order to User Company Response",
+              "schema": {
+                "$ref": "#/definitions/oneOrderUserCompanyResponse"
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/admin/orders/company/{ID}": {
+        "get": {
+          "tags": [
+            "Admin"
+          ],
+          "description": "Pega dados das trasações de uma empresa para administradores",
+          "operationId": "companyOrders",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "pageSize",
+              "type": "integer",
+              "minimum": 0,
+              "default": 1,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Orders from company",
+              "schema": {
+                "$ref": "#/definitions/companyOrdersResponse"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/admin/orders/{ID}": {
+        "get": {
+          "tags": [
+            "Admin"
+          ],
+          "description": "Pega dados de uma trasação para administradores",
+          "operationId": "oneOrder",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "one Order",
+              "schema": {
+                "$ref": "#/definitions/oneOrderResponse"
+              }
+            },
+            "400": {
+              "description": "Invalid input",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      },
+      "/v1/admin/orders/user/{ID}": {
+        "get": {
+          "tags": [
+            "Admin"
+          ],
+          "description": "Pega dados das trasações de um usuário para administradores",
+          "operationId": "userOrders",
+          "produces": [
+            "application/json"
+          ],
+          "consumes": [
+            "query"
+          ],
+          "parameters": [
+            {
+              "in": "header",
+              "name": "authorization",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "in": "path",
+              "name": "ID",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "page",
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "in": "query",
+              "name": "pageSize",
+              "type": "integer",
+              "minimum": 0,
+              "default": 1,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Orders from user",
+              "schema": {
+                "$ref": "#/definitions/userOrdersResponse"
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "schema": {
+                "$ref": "#/definitions/errorMessage"
+              }
+            }
+          }
+        }
+      }
+    },
+    "definitions": {
+      "createOrderRequest": {
+        "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "integer"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "street_number": {
+            "type": "integer"
+          },
+          "address_2": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "total_price": {
+            "type": "number"
+          },
+          "change": {
+            "type": "number"
+          },
+          "address_id":{
+            "type": "integer"
+          },
+          "address":{
+            "type": "object",
+            "properties": {
+                "cep": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "street_number": {
+                  "type": "integer"
+                },
+                "address_2": {
+                  "type": "string"
+                },
+                "neighborhood": {
+                  "type": "string"
+                }                    
+            }
+          },
+          "products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "product_id": {
+                  "type": "integer"
+                },
+                "variation_id": {
+                  "type": "integer"
+                },
+                "unity_price": {
+                  "type": "number"
+                },
+                "promotion_price": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateOrderStatusRequest": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "acceptedValues": "/^Confirmado$|^Entregue$|^Cancelado$/"
+          }
+        }
+      },
+      "UpdateOrderStatusPathRequest": {
+        "type": "integer"
+      },
+      "companyOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "company_id": {
+                  "type": "integer"
+                },
+                "buyer": {
+                  "type": "integer"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "street_number": {
+                  "type": "integer"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "cep": {
+                  "type": "string"
+                },
+                "neighborhood": {
+                  "type": "string"
+                },
+                "payment_method": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "change": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "order_products": {
+                  "type": "array",
+                  "items": {
+                    "type" : "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "product_id": {
+                        "type": "integer"
+                      },
+                      "product_variation_id": {
+                        "type": "integer"
+                      },
+                      "quantity": {
+                        "type": "integer"
+                      },
+                      "unity_price": {
+                        "type": "number"
+                      },
+                      "promotion_price": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "subcategory": {
+                        "type": "string"
+                      },
+                      "color": {
+                        "type": "string"
+                      },
+                      "size": {
+                        "type": "string"
+                      },
+                      "photo_key": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "pages": {
+            "type": "integer"
+          },
+          "bucket_url": {
+            "type": "string"
+          }
+        }
+      },
+    "oneOrderUserCompanyResponse": {
+      "type": "object",
+        "properties": {
+          "company_id": {
+            "type": "integer"
+          },
+          "buyer": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "street_number": {
+            "type": "integer"
+          },
+          "address2": {
+            "type": "string"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "count_products": {
+            "type": "integer"
+          },
+          "bucket_url": {
+            "type": "string"
+          },
+          "company": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "fantasy_name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "order_products": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "subcategory": {
+                  "type": "string"
+                },
+                "product_id": {
+                  "type": "number"
+                },
+                "product_variation_id": {
+                  "type": "number"
+                },
+                "unity_price": {
+                  "type": "number"
+                },
+                "promotion_price": {
+                  "type": "number"
+                },
+                "photo_key": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "user_info": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "full_name": {
+                  "type": "string"
+                },
+                "phone_country_code": {
+                  "type": "string"
+                },
+                "phone_area_code": {
+                  "type": "string"
+                },
+                "phone_number": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "company_info": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "phone_country_code": {
+                  "type": "string"
+                },
+                "phone_area_code": {
+                  "type": "string"
+                },
+                "phone_number": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+    },
+    "oneOrderResponse": {
+      "type": "object",
+        "properties": {
+          "buyer": {
+            "type": "integer"
+          },
+          "state": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "street_number": {
+            "type": "integer"
+          },
+          "address2": {
+            "type": "string"
+          },
+          "cep": {
+            "type": "string"
+          },
+          "neighborhood": {
+            "type": "string"
+          },
+          "payment_method": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "count_products": {
+            "type": "integer"
+          },
+          "OrderProducts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "category": {
+                  "type": "string"
+                },
+                "subcategory": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "userOrdersResponse": {
+        "type": "object",
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "company_id": {
+                  "type": "integer"
+                },
+                "buyer": {
+                  "type": "integer"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "street_number": {
+                  "type": "integer"
+                },
+                "address2": {
+                  "type": "string"
+                },
+                "cep": {
+                  "type": "string"
+                },
+                "neighborhood": {
+                  "type": "string"
+                },
+                "payment_method": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "change": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "created_at": {
+                  "type": "string"
+                },
+                "updated_at": {
+                  "type": "string"
+                },
+                "order_products": {
+                  "type": "array",
+                  "items": {
+                    "type" : "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "product_id": {
+                        "type": "integer"
+                      },
+                      "product_variation_id": {
+                        "type": "integer"
+                      },
+                      "quantity": {
+                        "type": "integer"
+                      },
+                      "unity_price": {
+                        "type": "number"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "category": {
+                        "type": "string"
+                      },
+                      "subcategory": {
+                        "type": "string"
+                      },
+                      "color": {
+                        "type": "string"
+                      },
+                      "size": {
+                        "type": "string"
+                      },
+                      "photo_key": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "bucket_url": {
+            "type": "string"
+          }
+        }
+      },
+      "errorMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "externalDocs": {
+      "description": "Github page",
+      "url": "https://github.com/darez-company/darez-api"
+    }
+  }

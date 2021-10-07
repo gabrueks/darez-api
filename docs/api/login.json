@@ -1,0 +1,295 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/auth/login": {
+      "post": {
+        "tags": ["Login"],
+        "description": "Verifica se um usuário existe e envia o código de login",
+        "operationId": "authLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/authLoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/login": {
+      "post": {
+        "description": "Confirma que o código recebido por mensagem esta válido",
+        "tags": [
+          "Login"
+        ],
+        "operationId": "userLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/UserLoginResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/login/verify": {
+      "post": {
+        "description": "Verifica se o token de um usuário é válido",
+        "tags": [
+          "Verify user log in"
+        ],
+        "operationId": "verifyUserLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyUserLoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/VerifyUserLoginResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "description": "Cria novos tokens caso tenha expirado",
+        "tags": [
+          "Refresh token"
+        ],
+        "operationId": "refreshToken",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/RefreshResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "VerifyUserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "VerifyUserLoginResponse": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "company_id": {
+          "type": "number",
+          "format": "integer"
+        }
+      }
+    },
+    "authLoginRequest": {
+      "type": "object",
+      "properties": {
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "is_consultant": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "confirmation_code": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        }
+      }
+    },
+    "UserLoginResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "user_group": {
+          "type": "integer"
+        },
+        "a_b_group": {
+          "type": "integer"
+        },
+        "company_id": {
+          "type": "integer"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "RefreshRequest": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        }
+      }
+    },
+    "RefreshResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "errorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}

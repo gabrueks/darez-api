@@ -1,0 +1,157 @@
+version: 2.1
+
+orbs:
+  aws-ecr: circleci/aws-ecr@6.9.1
+  aws-ecs: circleci/aws-ecs@1.2.0
+
+jobs:
+  unit-test:
+<<<<<<< HEAD
+=======
+    resource_class: large
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+    working_directory: ~/project
+    docker:
+      - image: circleci/node:lts-stretch
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - run:
+<<<<<<< HEAD
+            name: Running tests
+            command: npm run test:unit
+
+  integration-test:
+=======
+          name: Running tests
+          command: NODE_OPTIONS=--max_old_space_size=5120 npm run test:unit
+
+  integration-test:
+    resource_class: large
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+    working_directory: ~/project
+    docker:
+      - image: circleci/node:lts-stretch
+      - image: circleci/mysql:8.0.2
+<<<<<<< HEAD
+        command:
+          mysqld --sql-mode=""
+=======
+        command: mysqld --sql-mode=""
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+        environment:
+          MYSQL_ROOT_PASSWORD: rootpw
+          MYSQL_DATABASE: darezdb
+          MYSQL_USER: user
+          MYSQL_PASSWORD: passw0rd
+<<<<<<< HEAD
+=======
+    parallelism: 4
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      - run:
+          name: Install MySQL CLI and import dummy data
+          command: |
+            sudo apt-get install default-mysql-client
+            DB_HOST=127.0.0.1 DB_PORT=3306 DB_USER=user DB_PASS=passw0rd DB_NAME=darezdb npm run db:migrate
+            DB_HOST=127.0.0.1 DB_PORT=3306 DB_USER=user DB_PASS=passw0rd DB_NAME=darezdb npm run db:seed
+      - run:
+<<<<<<< HEAD
+            name: Running tests
+            command: DB_HOST=127.0.0.1 DB_PORT=3306 DB_USER=user DB_PASS=passw0rd DB_NAME=darezdb JWT_SECRET_KEY=senhaJWT AWS_BUCK_URL=bucketUrl npm run test:integration
+=======
+          name: Running tests
+          command: NODE_OPTIONS=--max_old_space_size=5120 DB_HOST=127.0.0.1 DB_PORT=3306 DB_USER=user DB_PASS=passw0rd DB_NAME=darezdb JWT_SECRET_KEY=senhaJWT AWS_BUCK_URL=bucketUrl npm run test:integration
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+
+  deploy-develop:
+    working_directory: ~/project
+    docker:
+      - image: circleci/python:latest
+    steps:
+      - checkout
+      - run:
+          name: Installing Deployment Dependencies
+          no_output_timeout: 30m
+          command: sudo pip install awsebcli --use-deprecated=legacy-resolver
+      - run:
+          name: Deploying Development Environment
+          command: eb deploy DevelopDarezApi-env
+
+workflows:
+  deploy:
+    jobs:
+      - unit-test
+<<<<<<< HEAD
+      - integration-test:
+          requires:
+            - unit-test
+=======
+      - integration-test
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+      - aws-ecr/build-and-push-image:
+          repo: darez-api
+          tag: '${CIRCLE_SHA1}'
+          context: darez-api
+          requires:
+            - integration-test
+<<<<<<< HEAD
+=======
+            - unit-test
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+          filters:
+            branches:
+              only: master
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          filters:
+            branches:
+              only: master
+          context: darez-api
+          family: production-darez-api
+          service-name: darez-api
+          cluster-name: production-api
+          container-image-name-updates: container=production-darez-api,tag=${CIRCLE_SHA1}
+      - deploy-develop:
+          requires:
+<<<<<<< HEAD
+=======
+            - unit-test
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+            - integration-test
+          filters:
+            branches:
+              only: master

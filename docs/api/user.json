@@ -1,0 +1,1225 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+<<<<<<< HEAD
+    "/v1/login": {
+      "post": {
+        "description": "Confirma que o código recebido por mensagem esta válido",
+        "tags": [
+          "Log user in"
+        ],
+        "operationId": "userLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/UserLoginResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/login/verify": {
+      "post": {
+        "description": "Verifica se o token de um usuário é válido",
+        "tags": [
+          "Verify user log in"
+        ],
+        "operationId": "verifyUserLogin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/VerifyUserLoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/VerifyUserLoginResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid input"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/auth/refresh": {
+      "post": {
+        "description": "Cria novos tokens caso tenha expirado",
+        "tags": [
+          "Refresh token"
+        ],
+        "operationId": "refreshToken",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RefreshRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "schema": {
+              "$ref": "#/definitions/RefreshResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/v1/users/company": {
+      "get": {
+        "tags": [
+          "User and company"
+        ],
+        "description": "Retorna o id e o nome do usuário logado e a empresa dele caso exista",
+        "operationId": "findUserCompany",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/findUserCompanyResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+=======
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+    "/v1/users": {
+      "post": {
+        "description": "Cria um novo usuário",
+        "tags": [
+          "User"
+        ],
+        "operationId": "createUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "204": {
+            "description": "Message sent"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User"
+        ],
+        "description": "Atualiza usuario sendo próprio usuario que esta logado",
+        "operationId": "updateUserUser",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Retorna as informações do usuário logado",
+        "operationId": "findUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/findUserResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/documents/{DOCUMENT}": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Obtem os dados de um usuário a partir do CPF",
+        "operationId": "findDocument",
+        "consumes": [
+          "path"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserAddresses"
+            }
+          },
+          {
+            "in": "path",
+            "name": "DOCUMENT",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/addresses": {
+      "post": {
+        "description": "Cria um novo endereço do usuário",
+        "tags": [
+          "User Addresses"
+        ],
+        "operationId": "createAddress",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserAddresses"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "$ref": "#/definitions/UpdateUserAddresses"
+          },
+          "204": {
+            "description": "Message sent"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "User Addresses"
+        ],
+        "description": "Atualiza o endereço do  usuario que esta logado",
+        "operationId": "updateAddress",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserAddresses"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User Addresses"
+        ],
+        "description": "Retorna todos os endereços do usuário",
+        "operationId": "findUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/ListUserAddresses"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "User Addresses"
+        ],
+        "description": "Delete logicamente os endereços enviados de um usuário",
+        "operationId": "deleteUserAddress",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteUserAddresses"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Addresses deleted"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/users/company": {
+      "get": {
+        "tags": [
+          "User and company"
+        ],
+        "description": "Retorna o id e o nome do usuário logado e a empresa dele caso exista",
+        "operationId": "findUserCompany",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/findUserCompanyResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/users": {
+      "get": {
+        "tags": [
+          "User for admin"
+        ],
+        "description": "Pega todos os usuários para um administrador logado",
+        "operationId": "usersAdmin",
+        "consumes": [
+          "query"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "field",
+            "type": "array",
+            "collectionFormat": "multi",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "type": "integer",
+            "minimum": 0,
+            "default": 0,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "pageSize",
+            "type": "integer",
+            "minimum": 0,
+            "default": 1,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Users",
+            "schema": {
+              "$ref": "#/definitions/usersAdminResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/users/{ID}": {
+      "put": {
+        "tags": [
+          "User for admin"
+        ],
+        "description": "Atualiza usuario sendo um administrador que esta logado",
+        "operationId": "updateUserAdmin",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserRequest"
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Updated"
+          },
+          "400": {
+            "description": "Invalid input",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "User for admin"
+        ],
+        "description": "Retorna as informações de um usuário sendo um administrador que esta pedindo as informações",
+        "operationId": "findUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "user found",
+            "schema": {
+              "$ref": "#/definitions/findUserResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+<<<<<<< HEAD
+    "UserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "confirmation_code": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        }
+      }
+    },
+    "UserLoginResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "user_group": {
+          "type": "integer"
+        },
+        "a_b_group": {
+          "type": "integer"
+        },
+        "company_id": {
+          "type": "integer"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "VerifyUserLoginRequest": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "VerifyUserLoginResponse": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "company_id": {
+          "type": "number",
+          "format": "integer"
+        }
+      }
+    },
+=======
+>>>>>>> 8138969678f1dff0b8be0ae4dedb8ec8d6fe8b81
+    "CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "is_consultant": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateUserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUserDocumentRequest": {
+      "type": "object",
+      "properties": {
+        "document": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUserRequest": {
+      "type": "object",
+      "properties": {
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "full_name": {
+          "type": "string"
+        }
+      }
+    },
+    "usersAdminResponse": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "integer"
+          },
+          "phone_country_code": {
+            "type": "string"
+          },
+          "phone_area_code": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          },
+          "confirmation_code": {
+            "type": "string"
+          },
+          "confirmation_code_requested_at": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "full_name": {
+            "type": "string"
+          },
+          "last_user_login": {
+            "type": "integer"
+          },
+          "last_consultor_login": {
+            "type": "string"
+          },
+          "last_consultor_name_login": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "created_by": {
+            "type": "string"
+          },
+          "new_user": {
+            "type": "string"
+          },
+          "user_group": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "findUserCompanyResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "ineger"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "user_id": {
+              "type": "integer"
+            },
+            "document": {
+              "type": "string"
+            },
+            "fantasy_name": {
+              "type": "string"
+            },
+            "cep": {
+              "type": "string"
+            },
+            "street": {
+              "type": "string"
+            },
+            "street_number": {
+              "type": "integer"
+            },
+            "address_2": {
+              "type": "string"
+            },
+            "neighborhood": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "delivery_range": {
+              "type": "number",
+              "format": "float"
+            },
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            },
+            "active": {
+              "type": "boolean"
+            },
+            "created_at": {
+              "type": "string"
+            },
+            "updated_at": {
+              "type": "string"
+            },
+            "banner": {
+              "type": "string"
+            },
+            "logo": {
+              "type": "string"
+            },
+            "endpoint": {
+              "type": "string"
+            },
+            "phone_country_code": {
+              "type": "string"
+            },
+            "phone_area_code": {
+              "type": "string"
+            },
+            "phone_number": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "findUserResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number",
+          "format": "integer"
+        },
+        "phone_country_code": {
+          "type": "string"
+        },
+        "phone_area_code": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "confirmation_code": {
+          "type": "string"
+        },
+        "confirmation_code_requested_at": {
+          "type": "string"
+        },
+        "active": {
+          "type": "boolean"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "last_user_login": {
+          "type": "integer"
+        },
+        "last_consultor_login": {
+          "type": "string"
+        },
+        "last_consultor_name_login": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        },
+        "created_by": {
+          "type": "string"
+        },
+        "new_user": {
+          "type": "string"
+        },
+        "user_group": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        }
+      }
+    },
+    "ListUserAddresses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id":{
+            "type": "integer"
+          },
+        "cep": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    }
+    },
+    "CreateUserAddresses": {
+      "type": "object",
+      "properties": {
+        "cep": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      }
+    },
+    "UpdateUserAddresses": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "cep": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "street_number": {
+          "type": "integer"
+        },
+        "address_2": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "latitude": {
+          "type": "string"
+        },
+        "longitude": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "created_at": {
+          "type": "string"
+        }
+      }
+    },
+    "DeleteUserAddresses": {
+      "type": "object",
+      "properties": {
+        "addresses": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "RefreshRequest": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "RefreshResponse": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "type": "string"
+        },
+        "refresh_token": {
+          "type": "string"
+        }
+      }
+    },
+    "errorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}

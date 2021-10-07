@@ -1,0 +1,12 @@
+node_modules
+.git
+.github
+.cache
+.docs
+.vscode
+.env.dist
+Makefile
+.gitignore
+docker-compose.yml
+.editorconfig
+.nyc_output

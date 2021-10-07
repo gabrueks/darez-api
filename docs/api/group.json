@@ -1,0 +1,98 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "DarezAPI description",
+    "version": "1.0.0",
+    "title": "DarezAPI"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "paths": {
+    "/v1/groups/{ID}": {
+      "get": {
+        "tags": [
+          "Group"
+        ],
+        "description": "Pega todas as permissões de um grupo",
+        "operationId": "getGroup",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "required": true
+            }
+          },
+          {
+            "in": "path",
+            "name": "ID",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "decription": "Group",
+            "schema": {
+              "$ref": "#/definitions/groupPermiResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "$ref": "#/definitions/errorMessage"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "groupPermiResponse": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "get_all_companies": { "type": "integer" },
+        "update_companies": { "type": "integer" },
+        "update_companies_banner": { "type": "integer" },
+        "delete_companies_banner": { "type": "integer" },
+        "update_companies_logo": { "type": "integer" },
+        "delete_companies_logo": { "type": "integer" },
+        "create_product": { "type": "integer" },
+        "update_product": { "type": "integer" },
+        "delete_product": { "type": "integer" },
+        "update_product_image": { "type": "integer" },
+        "delete_product_image": { "type": "integer" },
+        "update_user": { "type": "integer" },
+        "get_one_company": { "type": "integer" },
+        "get_one_user": { "type": "integer" },
+        "delete_product_variation": { "type": "integer" },
+        "active": { "type": "integer" },
+        "created_by": { "type": "string" },
+        "updated_by": { "type": "string" },
+        "created_at": { "type": "string" },
+        "updated_at": { "type": "string" }
+      }
+    },
+    "errorMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Github page",
+    "url": "https://github.com/darez-company/darez-api"
+  }
+}
